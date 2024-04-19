@@ -126,7 +126,6 @@ if len(text_input) > 0:
             success = True
         except:
           st.write(f'{sku} errored - retrying 😵‍💫')
-          time.sleep(0.1)
         retry += 1
           
     status.update(label="Scraping complete!", state="complete", expanded=False)

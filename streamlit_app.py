@@ -9,6 +9,7 @@ from pytz import timezone
 import streamlit as st
 
 def get_stockx_product_metadata(variant):
+  print('getting metadata')
   api_response = requests.post(
       "https://api.zyte.com/v1/extract",
       auth=(st.secrets["zyte_api_key"], ""),
@@ -20,7 +21,7 @@ def get_stockx_product_metadata(variant):
   http_response_body: bytes = b64decode(
       api_response.json()["httpResponseBody"])
 
-  soup = BeautifulSoup(http_response_body)
+  soup = BeautifulSoup(http_response_body, 'html.parser')
   url_key = soup.find("a", {"data-testid": "productTile-ProductSwitcherLink"})['href']
   title = soup.find("p", {"data-testid": "product-tile-title"}).getText()
   return url_key, title
@@ -28,6 +29,7 @@ def get_stockx_product_metadata(variant):
 
 # given a URL key and title, get the relevant stockX data.
 def get_stockx_pricing(url_key, title):
+  print('getting pricing data')
   sales_data = requests.post(
       "https://api.zyte.com/v1/extract",
       auth=(st.secrets["zyte_api_key"], ""),

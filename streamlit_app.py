@@ -108,15 +108,19 @@ if len(text_input) > 0:
   with st.status("Scraping stockX data...", expanded=True) as status:
     for idx,sku in enumerate(item_list):
       st.write(f'Scraping {sku}: {idx + 1} of {num_of_skus}')
-      while True:
+      success = False
+      retry = 0
+      while not success or retry <= 3:
         try:
         #append dataframe for SKUs we care about
           sku_input_dfs.append(get_stockx_data(sku))
-          time.sleep(0.1)
+          success = True
         except:
           st.write(f'{sku} errored - retrying 😵‍💫')
+          time.sleep(0.1)
+        retry += 1
           
-      status.update(label="Scraping complete!", state="complete", expanded=False)
+    status.update(label="Scraping complete!", state="complete", expanded=False)
       # output stockX dataframe
   stockx_df = pd.concat(sku_input_dfs).reset_index(drop=True)
   st.write(stockx_df)

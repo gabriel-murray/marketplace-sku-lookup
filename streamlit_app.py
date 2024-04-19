@@ -9,7 +9,7 @@ from pytz import timezone
 import streamlit as st
 
 def get_stockx_product_metadata(variant):
-  print('getting metadata')
+  st.write('getting metadata')
   api_response = requests.post(
       "https://api.zyte.com/v1/extract",
       auth=(st.secrets["zyte_api_key"], ""),
@@ -29,7 +29,7 @@ def get_stockx_product_metadata(variant):
 
 # given a URL key and title, get the relevant stockX data.
 def get_stockx_pricing(url_key, title):
-  print('getting pricing data')
+  st.write('getting pricing data')
   sales_data = requests.post(
       "https://api.zyte.com/v1/extract",
       auth=(st.secrets["zyte_api_key"], ""),

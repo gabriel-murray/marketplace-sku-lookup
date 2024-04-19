@@ -112,11 +112,18 @@ if len(text_input) > 0:
       st.write(f'Scraping {sku}: {idx + 1} of {num_of_skus}')
       success = False
       retry = 0
-      while not success or retry <= 3:
+      # if no sales data was gotten
+      while not success:
+        # retried less than 3 times
         try:
-        #append dataframe for SKUs we care about
-          sku_input_dfs.append(get_stockx_data(sku))
-          success = True
+          if retry <= 3:
+            #append dataframe for SKUs we care about
+            sku_input_dfs.append(get_stockx_data(sku))
+            st.write(f'StockX data obtained for {sku}.')
+            success = True
+          else:
+            st.write(f'{sku} could not be found. Max retry reached.')
+            success = True
         except:
           st.write(f'{sku} errored - retrying 😵‍💫')
           time.sleep(0.1)
